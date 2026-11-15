@@ -41,16 +41,3 @@ VALUES (
     'Colombia',
     3, 8, 45, 120, 78
 );
-
--- ================================================================
--- Usuario administrador de prueba (correo: admin@partido.com / clave: admin123)
--- ----------------------------------------------------------------
-INSERT INTO users (id, name, email, password, role, status)
-VALUES (
-    'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d',
-    'Administrador',
-    'admin@partido.com',
-    '$2y$10$CbpscSgoctPKj7U670KUduYEZ8WSliekXE.bPFb5F578nhpX6UDmO',
-    'ADMIN',
-    'ACTIVE'
-) ON CONFLICT (email) DO NOTHING;
