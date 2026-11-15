@@ -1,6 +1,7 @@
 package com.example.partidopolitico.application.responses;
 
 import com.example.partidopolitico.domain.PartidoPolitico;
+
 import java.time.LocalDateTime;
 
 public record PartidoPoliticoResponse(
@@ -36,8 +37,8 @@ public record PartidoPoliticoResponse(
                 partidoPolitico.numConcejales(),
                 partidoPolitico.numCongresistas(),
                 partidoPolitico.activo(),
-                partidoPolitico.createdAt().toLocalDate(),
-                partidoPolitico.updatedAt().toLocalDate()
+                partidoPolitico.createdAt(),
+                partidoPolitico.updatedAt()
         );
     }
 }

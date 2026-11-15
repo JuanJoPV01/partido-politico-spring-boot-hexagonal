@@ -1,13 +1,19 @@
 package com.example.partidopolitico.application.services;
 
-import com.example.partidopolitico.application.ports.in.*;
-import com.example.partidopolitico.application.ports.out.*;
+import com.example.partidopolitico.application.ports.in.CreatePartidoPoliticoUseCase;
+import com.example.partidopolitico.application.ports.in.DeletePartidoPoliticoUseCase;
+import com.example.partidopolitico.application.ports.in.GetAllPartidosPoliticosUseCase;
+import com.example.partidopolitico.application.ports.in.GetPartidoPoliticoByIdUseCase;
+import com.example.partidopolitico.application.ports.in.UpdatePartidoPoliticoUseCase;
+import com.example.partidopolitico.application.ports.out.DeletePartidoPoliticoPort;
+import com.example.partidopolitico.application.ports.out.GetAllPartidosPoliticosPort;
+import com.example.partidopolitico.application.ports.out.GetPartidoPoliticoByIdPort;
+import com.example.partidopolitico.application.ports.out.SavePartidoPoliticoPort;
 import com.example.partidopolitico.domain.PartidoPolitico;
 import com.example.partidopolitico.domain.PartidoPoliticoId;
-import com.example.partidopolitico.application.mappers.PartidoPoliticoMapper;
-import com.example.partidopolitico.domain.Exceptions.*;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PartidoPoliticoService implements
@@ -20,21 +26,22 @@ public class PartidoPoliticoService implements
     private final SavePartidoPoliticoPort savePartidoPoliticoPort;
     private final GetPartidoPoliticoByIdPort getPartidoPoliticoByIdPort;
     private final GetAllPartidosPoliticosPort getAllPartidosPoliticosPort;
+    private final DeletePartidoPoliticoPort deletePartidoPoliticoPort;
 
     public PartidoPoliticoService(
             SavePartidoPoliticoPort savePartidoPoliticoPort,
             GetPartidoPoliticoByIdPort getPartidoPoliticoByIdPort,
-            GetAllPartidosPoliticosPort getAllPartidosPoliticosPort) {
+            GetAllPartidosPoliticosPort getAllPartidosPoliticosPort,
+            DeletePartidoPoliticoPort deletePartidoPoliticoPort) {
         this.savePartidoPoliticoPort = savePartidoPoliticoPort;
         this.getPartidoPoliticoByIdPort = getPartidoPoliticoByIdPort;
         this.getAllPartidosPoliticosPort = getAllPartidosPoliticosPort;
+        this.deletePartidoPoliticoPort = deletePartidoPoliticoPort;
     }
 
     @Override
     public PartidoPolitico execute(PartidoPolitico partidoPolitico) {
-        validarDuplicidad(partidoPolitico.nombre());
-        PartidoPolitico guardado = savePartidoPoliticoPort.save(partidoPolitico);
-        return guardado;
+        return savePartidoPoliticoPort.save(partidoPolitico);
     }
 
     @Override
@@ -43,40 +50,31 @@ public class PartidoPoliticoService implements
     }
 
     @Override
-    public void execute(PartidoPoliticoId id) {
-        PartidoPolitico existente = getPartidoPoliticoByIdPort.findById(id);
-        // Logic would depend on whether soft delete or hard delete
-        throw new UnsupportedOperationException("Delete operation not fully implemented");
+    public void delete(PartidoPoliticoId id) {
+        deletePartidoPoliticoPort.deleteById(id);
     }
 
     @Override
-    public PartidoPolitico execute(PartidoPoliticoId id, PartidoPolitico partidoPolitico) {
+    public PartidoPolitico execute(PartidoPoliticoId id, PartidoPolitico cambios) {
         PartidoPolitico existente = getPartidoPoliticoByIdPort.findById(id);
         PartidoPolitico actualizado = existente.actualizar(
-                partidoPolitico.nombre().value(),
-                partidoPolitico.eslogan().value(),
-                partidoPolitico.presidente(),
-                partidoPolitico.secretario(),
-                partidoPolitico.tesorero(),
-                partidoPolitico.pais(),
-                partidoPolitico.numPresidentes(),
-                partidoPolitico.numGobernadores(),
-                partidoPolitico.numAlcaldes(),
-                partidoPolitico.numConcejales(),
-                partidoPolitico.numCongresistas()
+                cambios.nombre().value(),
+                cambios.eslogan().value(),
+                cambios.presidente(),
+                cambios.secretario(),
+                cambios.tesorero(),
+                cambios.pais(),
+                cambios.numPresidentes(),
+                cambios.numGobernadores(),
+                cambios.numAlcaldes(),
+                cambios.numConcejales(),
+                cambios.numCongresistas()
         );
         return savePartidoPoliticoPort.save(actualizado);
     }
 
     @Override
     public List<PartidoPolitico> execute() {
-        return getAllPartidosPoliticosPort.findAll().stream()
-                .collect(Collectors.toList());
-    }
-
-    private void validarDuplicidad(PartidoPoliticoNombre nombre) {
-        // Validation logic - in a real implementation would check the repository
-        // For now, throw if already exists pattern
-        throw new PartidoPoliticoAlreadyExistsException(nombre);
+        return getAllPartidosPoliticosPort.findAll();
     }
 }

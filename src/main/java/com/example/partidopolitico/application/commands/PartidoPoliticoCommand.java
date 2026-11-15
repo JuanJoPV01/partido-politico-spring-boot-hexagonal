@@ -1,10 +1,11 @@
 package com.example.partidopolitico.application.commands;
 
 import com.example.partidopolitico.domain.PartidoPolitico;
+import com.example.partidopolitico.domain.PartidoPoliticoEslogan;
 import com.example.partidopolitico.domain.PartidoPoliticoId;
 import com.example.partidopolitico.domain.PartidoPoliticoNombre;
-import com.example.partidopolitico.domain.PartidoPoliticoEslogan;
-import java.time.LocalDateTime;
+
+import java.util.UUID;
 
 public record PartidoPoliticoCommand(
         String nombre,
@@ -22,7 +23,7 @@ public record PartidoPoliticoCommand(
 
     public PartidoPolitico toDomain() {
         return new PartidoPolitico.PartidoPoliticoBuilder()
-                .id(PartidoPoliticoId.of(null))
+                .id(PartidoPoliticoId.of(UUID.randomUUID().toString()))
                 .nombre(PartidoPoliticoNombre.of(nombre))
                 .eslogan(PartidoPoliticoEslogan.of(eslogan))
                 .presidente(presidente)
@@ -35,13 +36,11 @@ public record PartidoPoliticoCommand(
                 .numConcejales(numConcejales)
                 .numCongresistas(numCongresistas)
                 .activo(true)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
     }
 
-    public PartidoPolitico toUpdatedDomain(PartidoPolitico existing) {
-        return existing.actualizar(
+    public PartidoPolitico toUpdatedDomain(PartidoPolitico existente) {
+        return existente.actualizar(
                 nombre,
                 eslogan,
                 presidente,
