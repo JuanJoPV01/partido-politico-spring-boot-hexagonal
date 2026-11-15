@@ -1,15 +1,23 @@
 package com.example.partidopolitico.web.controllers;
 
 import com.example.partidopolitico.application.commands.PartidoPoliticoCommand;
+import com.example.partidopolitico.application.mappers.PartidoPoliticoMapper;
 import com.example.partidopolitico.application.responses.PartidoPoliticoResponse;
 import com.example.partidopolitico.application.services.PartidoPoliticoService;
+import com.example.partidopolitico.domain.PartidoPolitico;
 import com.example.partidopolitico.domain.PartidoPoliticoId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/partidos-politicos")
@@ -25,7 +33,7 @@ public class PartidoPoliticoController {
     public ResponseEntity<List<PartidoPoliticoResponse>> listarTodos() {
         List<PartidoPoliticoResponse> lista = partidoPoliticoService.execute().stream()
                 .map(PartidoPoliticoMapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(lista);
     }
 
@@ -38,7 +46,6 @@ public class PartidoPoliticoController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PartidoPoliticoResponse> crear(@RequestBody PartidoPoliticoCommand command) {
         PartidoPolitico creado = partidoPoliticoService.execute(command.toDomain());
         PartidoPoliticoResponse respuesta = PartidoPoliticoMapper.toResponse(creado);
@@ -50,16 +57,15 @@ public class PartidoPoliticoController {
             @PathVariable String id,
             @RequestBody PartidoPoliticoCommand command) {
         PartidoPolitico actualizado = partidoPoliticoService.execute(
-                new PartidoPoliticoId(id), command.toUpdatedDomain(new PartidoPolitico())
+                new PartidoPoliticoId(id), command.toDomain()
         );
         PartidoPoliticoResponse respuesta = PartidoPoliticoMapper.toResponse(actualizado);
         return ResponseEntity.ok(respuesta);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> eliminar(@PathVariable String id) {
-        partidoPoliticoService.execute(new PartidoPoliticoId(id));
+        partidoPoliticoService.delete(new PartidoPoliticoId(id));
         return ResponseEntity.noContent().build();
     }
 }
