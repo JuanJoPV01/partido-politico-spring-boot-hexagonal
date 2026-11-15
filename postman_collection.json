@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "c9b1f0de-7a41-4b2e-9f6a-1d2c3e4f5a6b",
+		"name": "Partido Politico API",
+		"description": "Coleccion para probar el CRUD de Partidos Politicos con Arquitectura Hexagonal, DDD y CQRS en Spring Boot.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar todos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/partidos-politicos",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "partidos-politicos"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/partidos-politicos/{{id}}",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "partidos-politicos", "{{id}}"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const respuesta = pm.response.json();",
+							"if (respuesta.id) {",
+							"    pm.collectionVariables.set('id', respuesta.id);",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Partido de Prueba Postman\",\n    \"eslogan\": \"Creado desde Postman\",\n    \"presidente\": \"Sofia Ramirez\",\n    \"secretario\": \"Andres Vega\",\n    \"tesorero\": \"Lucia Herrera\",\n    \"pais\": \"Mexico\",\n    \"numPresidentes\": 1,\n    \"numGobernadores\": 2,\n    \"numAlcaldes\": 10,\n    \"numConcejales\": 25,\n    \"numCongresistas\": 8\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/partidos-politicos",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "partidos-politicos"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nombre\": \"Partido de Prueba Postman\",\n    \"eslogan\": \"Actualizado desde Postman\",\n    \"presidente\": \"Sofia Ramirez\",\n    \"secretario\": \"Andres Vega\",\n    \"tesorero\": \"Lucia Herrera\",\n    \"pais\": \"Mexico\",\n    \"numPresidentes\": 2,\n    \"numGobernadores\": 3,\n    \"numAlcaldes\": 12,\n    \"numConcejales\": 30,\n    \"numCongresistas\": 10\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/partidos-politicos/{{id}}",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "partidos-politicos", "{{id}}"]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/partidos-politicos/{{id}}",
+					"host": ["{{baseUrl}}"],
+					"path": ["api", "partidos-politicos", "{{id}}"]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "id",
+			"value": "b3b8cd37-9634-4eaa-9861-a7c7e47a76da"
+		}
+	]
+}
