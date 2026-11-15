@@ -40,7 +40,7 @@ public class PartidoPoliticoController {
     @GetMapping("/{id}")
     public ResponseEntity<PartidoPoliticoResponse> obtenerPorId(@PathVariable String id) {
         PartidoPoliticoResponse respuesta = PartidoPoliticoMapper.toResponse(
-                partidoPoliticoService.execute(new PartidoPoliticoId(id))
+                partidoPoliticoService.execute(PartidoPoliticoId.of(id))
         );
         return ResponseEntity.ok(respuesta);
     }
@@ -57,7 +57,7 @@ public class PartidoPoliticoController {
             @PathVariable String id,
             @RequestBody PartidoPoliticoCommand command) {
         PartidoPolitico actualizado = partidoPoliticoService.execute(
-                new PartidoPoliticoId(id), command.toDomain()
+                PartidoPoliticoId.of(id), command.toDomain()
         );
         PartidoPoliticoResponse respuesta = PartidoPoliticoMapper.toResponse(actualizado);
         return ResponseEntity.ok(respuesta);
@@ -65,7 +65,7 @@ public class PartidoPoliticoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable String id) {
-        partidoPoliticoService.delete(new PartidoPoliticoId(id));
+        partidoPoliticoService.delete(PartidoPoliticoId.of(id));
         return ResponseEntity.noContent().build();
     }
 }
