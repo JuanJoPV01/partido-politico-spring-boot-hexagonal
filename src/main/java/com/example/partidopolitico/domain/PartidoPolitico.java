@@ -1,5 +1,6 @@
 package com.example.partidopolitico.domain;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public final class PartidoPolitico {
@@ -17,10 +18,10 @@ public final class PartidoPolitico {
     private final int numConcejales;
     private final int numCongresistas;
     private final boolean activo;
-    private final java.time.LocalDateTime createdAt;
-    private java.time.LocalDateTime updatedAt;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
-    private PartidoPolitico(Builder builder) {
+    private PartidoPolitico(PartidoPoliticoBuilder builder) {
         this.id = builder.id;
         this.nombre = builder.nombre;
         this.eslogan = builder.eslogan;
@@ -38,21 +39,65 @@ public final class PartidoPolitico {
         this.updatedAt = builder.updatedAt;
     }
 
-    public PartidoPoliticoId id() { return id; }
-    public PartidoPoliticoNombre nombre() { return nombre; }
-    public PartidoPoliticoEslogan eslogan() { return eslogan; }
-    public String presidente() { return presidente; }
-    public String secretario() { return secretario; }
-    public String tesorero() { return tesorero; }
-    public String pais() { return pais; }
-    public int numPresidentes() { return numPresidentes; }
-    public int numGobernadores() { return numGobernadores; }
-    public int numAlcaldes() { return numAlcaldes; }
-    public int numConcejales() { return numConcejales; }
-    public int numCongresistas() { return numCongresistas; }
-    public boolean activo() { return activo; }
-    public java.time.LocalDateTime createdAt() { return createdAt; }
-    public java.time.LocalDateTime updatedAt() { return updatedAt; }
+    public PartidoPoliticoId id() {
+        return id;
+    }
+
+    public PartidoPoliticoNombre nombre() {
+        return nombre;
+    }
+
+    public PartidoPoliticoEslogan eslogan() {
+        return eslogan;
+    }
+
+    public String presidente() {
+        return presidente;
+    }
+
+    public String secretario() {
+        return secretario;
+    }
+
+    public String tesorero() {
+        return tesorero;
+    }
+
+    public String pais() {
+        return pais;
+    }
+
+    public int numPresidentes() {
+        return numPresidentes;
+    }
+
+    public int numGobernadores() {
+        return numGobernadores;
+    }
+
+    public int numAlcaldes() {
+        return numAlcaldes;
+    }
+
+    public int numConcejales() {
+        return numConcejales;
+    }
+
+    public int numCongresistas() {
+        return numCongresistas;
+    }
+
+    public boolean activo() {
+        return activo;
+    }
+
+    public LocalDateTime createdAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime updatedAt() {
+        return updatedAt;
+    }
 
     public PartidoPolitico actualizar(
             String nombre,
@@ -67,20 +112,23 @@ public final class PartidoPolitico {
             int numConcejales,
             int numCongresistas) {
 
-        PartidoPolitico actualizado = new PartidoPolitico(new Builder(this));
-        actualizado.nombre = PartidoPoliticoNombre.of(nombre);
-        actualizado.eslogan = PartidoPoliticoEslogan.of(eslogan);
-        actualizado.presidente = presidente;
-        actualizado.secretario = secretario;
-        actualizado.tesorero = tesorero;
-        actualizado.pais = pais;
-        actualizado.numPresidentes = numPresidentes;
-        actualizado.numGobernadores = numGobernadores;
-        actualizado.numAlcaldes = numAlcaldes;
-        actualizado.numConcejales = numConcejales;
-        actualizado.numCongresistas = numCongresistas;
-        actualizado.updatedAt = java.time.LocalDateTime.now();
-        return actualizado;
+        return new PartidoPoliticoBuilder()
+                .id(this.id)
+                .nombre(PartidoPoliticoNombre.of(nombre))
+                .eslogan(PartidoPoliticoEslogan.of(eslogan))
+                .presidente(presidente)
+                .secretario(secretario)
+                .tesorero(tesorero)
+                .pais(pais)
+                .numPresidentes(numPresidentes)
+                .numGobernadores(numGobernadores)
+                .numAlcaldes(numAlcaldes)
+                .numConcejales(numConcejales)
+                .numCongresistas(numCongresistas)
+                .activo(this.activo)
+                .createdAt(this.createdAt)
+                .updatedAt(LocalDateTime.now())
+                .build();
     }
 
     @Override
@@ -88,27 +136,12 @@ public final class PartidoPolitico {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PartidoPolitico that = (PartidoPolitico) o;
-        return numPresidentes == that.numPresidentes &&
-               numGobernadores == that.numGobernadores &&
-               numAlcaldes == that.numAlcaldes &&
-               numConcejales == that.numConcejales &&
-               numCongresistas == that.numCongresistas &&
-               Objects.equals(id, that.id) &&
-               Objects.equals(nombre, that.nombre) &&
-               Objects.equals(eslogan, that.eslogan) &&
-               Objects.equals(presidente, that.presidente) &&
-               Objects.equals(secretario, that.secretario) &&
-               Objects.equals(tesorero, that.tesorero) &&
-               Objects.equals(pais, that.pais) &&
-               activo == that.activo &&
-               Objects.equals(createdAt, that.createdAt) &&
-               Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, eslogan, presidente, secretario, tesorero, pais,
-            numPresidentes, numGobernadores, numAlcaldes, numConcejales, numCongresistas, activo, createdAt, updatedAt);
+        return Objects.hash(id);
     }
 
     @Override
@@ -132,7 +165,8 @@ public final class PartidoPolitico {
                 '}';
     }
 
-    public static final class Builder {
+    public static final class PartidoPoliticoBuilder {
+
         private PartidoPoliticoId id;
         private PartidoPoliticoNombre nombre;
         private PartidoPoliticoEslogan eslogan;
@@ -146,103 +180,86 @@ public final class PartidoPolitico {
         private int numConcejales;
         private int numCongresistas;
         private boolean activo;
-        private java.time.LocalDateTime createdAt;
-        private java.time.LocalDateTime updatedAt;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
-        public Builder() {
+        public PartidoPoliticoBuilder() {
             this.activo = true;
-            this.createdAt = java.time.LocalDateTime.now();
+            this.createdAt = LocalDateTime.now();
+            this.updatedAt = LocalDateTime.now();
         }
 
-        private Builder(PartidoPolitico partidoPolitico) {
-            this.id = partidoPolitico.id;
-            this.nombre = partidoPolitico.nombre;
-            this.eslogan = partidoPolitico.eslogan;
-            this.presidente = partidoPolitico.presidente;
-            this.secretario = partidoPolitico.secretario;
-            this.tesorero = partidoPolitico.tesorero;
-            this.pais = partidoPolitico.pais;
-            this.numPresidentes = partidoPolitico.numPresidentes;
-            this.numGobernadores = partidoPolitico.numGobernadores;
-            this.numAlcaldes = partidoPolitico.numAlcaldes;
-            this.numConcejales = partidoPolitico.numConcejales;
-            this.numCongresistas = partidoPolitico.numCongresistas;
-            this.activo = partidoPolitico.activo;
-            this.createdAt = partidoPolitico.createdAt;
-            this.updatedAt = partidoPolitico.updatedAt;
-        }
-
-        public Builder id(PartidoPoliticoId id) {
+        public PartidoPoliticoBuilder id(PartidoPoliticoId id) {
             this.id = id;
             return this;
         }
 
-        public Builder nombre(PartidoPoliticoNombre nombre) {
+        public PartidoPoliticoBuilder nombre(PartidoPoliticoNombre nombre) {
             this.nombre = nombre;
             return this;
         }
 
-        public Builder eslogan(PartidoPoliticoEslogan eslogan) {
+        public PartidoPoliticoBuilder eslogan(PartidoPoliticoEslogan eslogan) {
             this.eslogan = eslogan;
             return this;
         }
 
-        public Builder presidente(String presidente) {
+        public PartidoPoliticoBuilder presidente(String presidente) {
             this.presidente = presidente;
             return this;
         }
 
-        public Builder secretario(String secretario) {
+        public PartidoPoliticoBuilder secretario(String secretario) {
             this.secretario = secretario;
             return this;
         }
 
-        public Builder tesorero(String tesorero) {
+        public PartidoPoliticoBuilder tesorero(String tesorero) {
             this.tesorero = tesorero;
             return this;
         }
 
-        public Builder pais(String pais) {
+        public PartidoPoliticoBuilder pais(String pais) {
             this.pais = pais;
             return this;
         }
 
-        public Builder numPresidentes(int numPresidentes) {
+        public PartidoPoliticoBuilder numPresidentes(int numPresidentes) {
             this.numPresidentes = numPresidentes;
             return this;
         }
 
-        public Builder numGobernadores(int numGobernadores) {
+        public PartidoPoliticoBuilder numGobernadores(int numGobernadores) {
             this.numGobernadores = numGobernadores;
             return this;
         }
 
-        public Builder numAlcaldes(int numAlcaldes) {
+        public PartidoPoliticoBuilder numAlcaldes(int numAlcaldes) {
             this.numAlcaldes = numAlcaldes;
             return this;
         }
 
-        public Builder numConcejales(int numConcejales) {
+        public PartidoPoliticoBuilder numConcejales(int numConcejales) {
             this.numConcejales = numConcejales;
             return this;
         }
 
-        public Builder numCongresistas(int numCongresistas) {
+        public PartidoPoliticoBuilder numCongresistas(int numCongresistas) {
             this.numCongresistas = numCongresistas;
             return this;
         }
 
-        public Builder activo(boolean activo) {
+        public PartidoPoliticoBuilder activo(boolean activo) {
             this.activo = activo;
             return this;
         }
 
-        public Builder createdAt(java.time.LocalDateTime createdAt) {
+        public PartidoPoliticoBuilder createdAt(LocalDateTime createdAt) {
             this.createdAt = createdAt;
             return this;
         }
 
-        public Builder updatedAt(java.time.LocalDateTime updatedAt) {
+        public PartidoPoliticoBuilder updatedAt(LocalDateTime updatedAt) {
             this.updatedAt = updatedAt;
             return this;
         }
@@ -264,6 +281,19 @@ public final class PartidoPolitico {
             }
             if (pais == null || pais.isBlank()) {
                 throw new IllegalStateException("El país es obligatorio");
+            }
+            if (presidente == null || presidente.isBlank()) {
+                throw new IllegalStateException("El presidente es obligatorio");
+            }
+            if (secretario == null || secretario.isBlank()) {
+                throw new IllegalStateException("El secretario es obligatorio");
+            }
+            if (tesorero == null || tesorero.isBlank()) {
+                throw new IllegalStateException("El tesorero es obligatorio");
+            }
+            if (numPresidentes < 0 || numGobernadores < 0 || numAlcaldes < 0
+                    || numConcejales < 0 || numCongresistas < 0) {
+                throw new IllegalStateException("Los conteos no pueden ser negativos");
             }
         }
     }
